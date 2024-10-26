@@ -1,26 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <h1>영화정보</h1>
+  <div>
+    <h3 class="bg-yellow" :style="textRed">{{ title }}</h3>
+    <p>개봉: {{ year }}</p>
+    <p>장르: {{ category }}</p>
+  </div>
+  <p v-for="(item,i) in foods" :key="i">
+    {{ item}}
+  </p>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      foods: ["김밥","순대","만두"],
+      title: "노량",
+      year: 2023,
+      category: "액션, 드라마",
+      textRed: "color: red",
+    }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.bg-yellow {
+  background: gold;
+  padding: 10px;
 }
 </style>
