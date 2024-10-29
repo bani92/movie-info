@@ -1,6 +1,9 @@
 <template>
   <h1>영화정보</h1>
   <div v-for="(data, i) in data" :key="i">
+    <figure>
+      <img :src="`${data.imgUrl}`" alt="" />
+    </figure>
     <h3 class="bg-yellow" :style="textRed">{{ data.title }}</h3>
     <p>개봉: {{ data.year }}</p>
     <p>장르: {{ data.category }}</p>
@@ -20,18 +23,21 @@ export default {
           category: "액션, 드라마",
           textRed: "color: red",
           cnt: 0,
+          imgUrl: require("./assets/1.png"),
         },
         {
           title: "아쿠아맨과 로스트 킹덤",
           year: 2023,
           category: "액션, 판타지, 어드벤처",
           cnt: 0,
+          imgUrl: require("./assets/2.png"),
         },
         {
           title: "3일의 휴가",
           year: 2023,
           category: "판타지, 드라마",
           cnt: 0,
+          imgUrl: require("./assets/3.png"),
         },
       ],
     };
@@ -48,5 +54,9 @@ export default {
 .bg-yellow {
   background: gold;
   padding: 10px;
+}
+img {
+  width: 100px;
+  height: 100px;
 }
 </style>
