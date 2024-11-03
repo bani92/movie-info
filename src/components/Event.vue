@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "EventCompoonent",
+  name: "EventComponent",
   props: {
     text: String,
   },
