@@ -1,4 +1,6 @@
 <template>
+  <Navbar />
+  <Event :text="text" />
   <h1>영화정보</h1>
   <div v-for="(data, i) in data" :key="i">
     <figure>
@@ -22,18 +24,20 @@
       </button>
     </p>
   </div>
-
-  <div class="modal" v-if="isModal">
-    <div class="inner">
-      <h3>{{ data[selectedMovie].title }}</h3>
-      <p>영화 상세정보</p>
-      <button @click="isModal = false">닫기</button>
-    </div>
-  </div>
+  <Modal
+    :data="data"
+    :isModal="isModal"
+    :selectedMovie="selectedMovie"
+    @closeModal="isModal = false"
+  />
 </template>
 
 <script>
 import data from "./assets/movies";
+import Navbar from "./components/Navbar.vue";
+import Modal from "./components/Modal.vue";
+import Event from "./components/Event.vue";
+
 export default {
   name: "App",
   data() {
@@ -41,12 +45,18 @@ export default {
       isModal: false,
       data: data,
       selectedMovie: 0,
+      text: "NEXPLIX 강렬한 드라마",
     };
   },
   methods: {
     increseLike(i) {
       this.data[i].cnt += 1;
     },
+  },
+  components: {
+    Navbar: Navbar,
+    Modal: Modal,
+    Event: Event,
   },
 };
 </script>
