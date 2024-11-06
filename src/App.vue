@@ -1,6 +1,7 @@
 <template>
   <Navbar />
-  <Event :text="text" />
+  <Event :text="text[eventTextNum]" />
+  {{ eventTextNum }}
   <SearchBar :data="data_temp" @searchMovie="searchMovie($event)" />
   <p>
     <button @click="showAllMoive">전체보기</button>
@@ -37,7 +38,9 @@ export default {
       data: data,
       data_temp: [...data],
       selectedMovie: 0,
-      text: "NEXPLIX 강렬한 드라마",
+      text: ["NETPLIX 첫번째", "디즈니 100주년", "대한민국 서울의 봄"],
+      eventTextNum: 0,
+      interval: null,
     };
   },
   methods: {
@@ -65,6 +68,18 @@ export default {
     Event: Event,
     Movies: Movies,
     SearchBar: SearchBar,
+  },
+  mounted() {
+    this.interval = setInterval(() => {
+      if (this.eventTextNum === this.text.length - 1) {
+        this.eventTextNum = 0;
+      } else {
+        this.eventTextNum += 1;
+      }
+    }, 3000);
+  },
+  unmounted() {
+    clearInterval(this.interval); // 컴포넌트가 종료되도 계속 실행되는 이슈 , 타이머 해제
   },
 };
 </script>
