@@ -157,8 +157,8 @@ button {
 </style> -->
 
 <template>
-  <div>{{ name }}</div>
-  <button @click="updateName">버튼</button>
+  <input type="text" :value="name" @input="updateName" />
+  <button @click="onSubmit">버튼</button>
 </template>
 
 <script>
@@ -171,20 +171,26 @@ button {
 import { ref } from "vue";
 export default {
   setup() {
-    const name = ref({
-      id: 1,
-    });
+    const name = ref("123");
 
-    const updateName = () => {
-      name.value.id = 2;
+    const onSubmit = () => {
+      console.log(name.value);
     };
 
+    const updateName = (e) => {
+      name.value = e.target.value;
+    };
     return {
       name,
+      onSubmit,
       updateName,
     };
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+.name {
+  color: red;
+}
+</style>
