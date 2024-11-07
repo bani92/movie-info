@@ -157,17 +157,11 @@ button {
 </style> -->
 
 <template>
-  <input type="text" :value="name" @input="updateName" />
+  <input type="text" v-model="name" />
   <button @click="onSubmit">버튼</button>
 </template>
 
 <script>
-// reactive - [] 배열 , {} 객체
-// name.id 접근가능
-
-// ref - String, Number
-// name.value.id
-
 import { ref } from "vue";
 export default {
   setup() {
@@ -177,13 +171,9 @@ export default {
       console.log(name.value);
     };
 
-    const updateName = (e) => {
-      name.value = e.target.value;
-    };
     return {
       name,
       onSubmit,
-      updateName,
     };
   },
 };
