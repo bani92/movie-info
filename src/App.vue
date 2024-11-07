@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <Navbar />
   <Event :text="text[eventTextNum]" />
   {{ eventTextNum }}
@@ -154,4 +154,37 @@ button {
   padding: 20px;
   border-radius: 10px;
 }
-</style>
+</style> -->
+
+<template>
+  <div>{{ name }}</div>
+  <button @click="updateName">버튼</button>
+</template>
+
+<script>
+// reactive - [] 배열 , {} 객체
+// name.id 접근가능
+
+// ref - String, Number
+// name.value.id
+
+import { ref } from "vue";
+export default {
+  setup() {
+    const name = ref({
+      id: 1,
+    });
+
+    const updateName = () => {
+      name.value.id = 2;
+    };
+
+    return {
+      name,
+      updateName,
+    };
+  },
+};
+</script>
+
+<style lang="scss" scoped></style>
