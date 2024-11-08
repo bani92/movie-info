@@ -157,22 +157,44 @@ button {
 </style> -->
 
 <template>
-  <input type="text" v-model="name" />
-  <button @click="onSubmit">버튼</button>
+  <div class="container">
+    <h2>To-Do List</h2>
+    <form class="d-flex" @submit.prevent="onSubmit">
+      <div class="flex-grow-1 mr-2">
+        <input
+          class="form-control"
+          type="text"
+          v-model="todo"
+          placeholder="Type new to-do"
+        />
+      </div>
+      <div>
+        <button class="btn btn-primary" type="submit">Add</button>
+      </div>
+    </form>
+    {{ todos }}
+  </div>
 </template>
 
 <script>
 import { ref } from "vue";
 export default {
   setup() {
-    const name = ref("123");
+    const todo = ref("123");
+    const todos = ref([]);
 
+    // form의 submit를 하면 화면이 리로딩되는데 preventDefault로 리로딩 방지
     const onSubmit = () => {
-      console.log(name.value);
+      // e.preventDefault();
+      todos.value.push({
+        id: Date.now(),
+        subject: todo.value,
+      });
     };
 
     return {
-      name,
+      todo,
+      todos,
       onSubmit,
     };
   },
