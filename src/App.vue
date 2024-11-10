@@ -159,20 +159,38 @@ button {
 <template>
   <div class="container">
     <h2>To-Do List</h2>
-    <form class="d-flex" @submit.prevent="onSubmit">
-      <div class="flex-grow-1 mr-2">
-        <input
-          class="form-control"
-          type="text"
-          v-model="todo"
-          placeholder="Type new to-do"
-        />
+    <form @submit.prevent="onSubmit">
+      <div class="d-flex">
+        <div class="flex-grow-1 mr-2">
+          <input
+            class="form-control"
+            type="text"
+            v-model="todo"
+            placeholder="Type new to-do"
+          />
+        </div>
+        <div>
+          <button class="btn btn-primary" type="submit">Add</button>
+        </div>
       </div>
-      <div>
-        <button class="btn btn-primary" type="submit">Add</button>
-      </div>
+      <div v-show="hasError" style="color: red">This field cannot be empty</div>
     </form>
-    {{ todos }}
+    <div class="card mt-2" v-for="item in todos" :key="item.id">
+      <div class="card-body p-2">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            v-model="item.completed"
+          />
+          <label
+            class="form-check-label"
+            :style="item.completed ? todoStyle : {}"
+            >{{ item.subject }}</label
+          >
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -180,29 +198,50 @@ button {
 import { ref } from "vue";
 export default {
   setup() {
-    const todo = ref("123");
+    const toggle = ref(false);
+    const todo = ref("");
     const todos = ref([]);
+    const todoStyle = {
+      textDecoration: "line-through",
+      color: "gray",
+    };
+    const hasError = ref(false);
 
     // form의 submit를 하면 화면이 리로딩되는데 preventDefault로 리로딩 방지
     const onSubmit = () => {
-      // e.preventDefault();
-      todos.value.push({
-        id: Date.now(),
-        subject: todo.value,
-      });
+      if (todo.value === "") {
+        hasError.value = true;
+      } else {
+        // e.preventDefault();
+        todos.value.push({
+          id: Date.now(),
+          subject: todo.value,
+          completed: false,
+        });
+        hasError.value = false;
+        todo.value = "";
+      }
     };
 
+    const onToggle = () => {
+      toggle.value = !toggle.value;
+    };
     return {
+      toggle,
       todo,
       todos,
       onSubmit,
+      onToggle,
+      hasError,
+      todoStyle,
     };
   },
 };
 </script>
 
 <style>
-.name {
-  color: red;
+.todo {
+  color: gray;
+  text-decoration: line-through;
 }
 </style>
