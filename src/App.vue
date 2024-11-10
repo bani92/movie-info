@@ -173,21 +173,25 @@ button {
           <button class="btn btn-primary" type="submit">Add</button>
         </div>
       </div>
+      <div v-if="!todos.length">추가된 Todo가 없습니다</div>
       <div v-show="hasError" style="color: red">This field cannot be empty</div>
     </form>
-    <div class="card mt-2" v-for="item in todos" :key="item.id">
-      <div class="card-body p-2">
-        <div class="form-check">
+    <div class="card mt-2" v-for="(item, index) in todos" :key="item.id">
+      <div class="card-body p-2 d-flex align-items-center">
+        <div class="form-check flex-grow-1">
           <input
             class="form-check-input"
             type="checkbox"
             v-model="item.completed"
           />
-          <label
-            class="form-check-label"
-            :style="item.completed ? todoStyle : {}"
-            >{{ item.subject }}</label
-          >
+          <label class="form-check-label" :class="{ todo: item.completed }">{{
+            item.subject
+          }}</label>
+        </div>
+        <div>
+          <button class="btn btn-danger btn-sm" @click="deleteItem(index)">
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -226,6 +230,11 @@ export default {
     const onToggle = () => {
       toggle.value = !toggle.value;
     };
+
+    const deleteItem = (index) => {
+      todos.value.splice(index, 1);
+      // todos.value = todos.value.filter((e) => e.id !== e1); 내가 한 방법
+    };
     return {
       toggle,
       todo,
@@ -234,6 +243,7 @@ export default {
       onToggle,
       hasError,
       todoStyle,
+      deleteItem,
     };
   },
 };
