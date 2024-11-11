@@ -159,72 +159,37 @@ button {
 <template>
   <div class="container">
     <h2>To-Do List</h2>
-    <form @submit.prevent="onSubmit">
-      <div class="d-flex">
-        <div class="flex-grow-1 mr-2">
-          <input
-            class="form-control"
-            type="text"
-            v-model="todo"
-            placeholder="Type new to-do"
-          />
-        </div>
-        <div>
-          <button class="btn btn-primary" type="submit">Add</button>
-        </div>
-      </div>
-      <div v-if="!todos.length">추가된 Todo가 없습니다</div>
-      <div v-show="hasError" style="color: red">This field cannot be empty</div>
-    </form>
-    <div class="card mt-2" v-for="(item, index) in todos" :key="item.id">
-      <div class="card-body p-2 d-flex align-items-center">
-        <div class="form-check flex-grow-1">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            v-model="item.completed"
-          />
-          <label class="form-check-label" :class="{ todo: item.completed }">{{
-            item.subject
-          }}</label>
-        </div>
-        <div>
-          <button class="btn btn-danger btn-sm" @click="deleteItem(index)">
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
+    <TodoSimpleForm @add-todo="addTodo" />
+    <div v-if="!todos.length">추가된 Todo가 없습니다</div>
+    <TodoList
+      :todos="todos"
+      @toggle-todo="toggleTodo"
+      @delete-item="deleteItem"
+    />
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
+import TodoSimpleForm from "./components/TodoSimpleForm.vue";
+import TodoList from "./components/TodoList.vue";
+
 export default {
+  components: {
+    TodoSimpleForm,
+    TodoList,
+  },
   setup() {
     const toggle = ref(false);
-    const todo = ref("");
     const todos = ref([]);
     const todoStyle = {
       textDecoration: "line-through",
       color: "gray",
     };
-    const hasError = ref(false);
 
     // form의 submit를 하면 화면이 리로딩되는데 preventDefault로 리로딩 방지
-    const onSubmit = () => {
-      if (todo.value === "") {
-        hasError.value = true;
-      } else {
-        // e.preventDefault();
-        todos.value.push({
-          id: Date.now(),
-          subject: todo.value,
-          completed: false,
-        });
-        hasError.value = false;
-        todo.value = "";
-      }
+    const addTodo = (todo) => {
+      todos.value.push(todo);
     };
 
     const onToggle = () => {
@@ -235,15 +200,18 @@ export default {
       todos.value.splice(index, 1);
       // todos.value = todos.value.filter((e) => e.id !== e1); 내가 한 방법
     };
+
+    const toggleTodo = (index) => {
+      todos.value[index].completed = !todos.value[index].completed;
+    };
     return {
       toggle,
-      todo,
       todos,
-      onSubmit,
+      addTodo,
       onToggle,
-      hasError,
       todoStyle,
       deleteItem,
+      toggleTodo,
     };
   },
 };
