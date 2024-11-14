@@ -158,15 +158,18 @@ button {
 
 <template>
   <div class="container">
-    <h5>count : {{ count }}</h5>
-    <h5>doublecount : {{ doubleCount }}</h5>
-    <h5>doubleCountMethod : {{ doubleCountMethod() }}</h5>
-    <button @click="count++">Add One</button>
     <h2>To-Do List</h2>
+    <input
+      class="form-control"
+      type="text"
+      v-model="searchText"
+      placeholder="Search"
+    />
+    <hr />
     <TodoSimpleForm @add-todo="addTodo" />
     <div v-if="!todos.length">추가된 Todo가 없습니다</div>
     <TodoList
-      :todos="todos"
+      :todos="filteredTodos"
       @toggle-todo="toggleTodo"
       @delete-item="deleteItem"
     />
@@ -174,7 +177,7 @@ button {
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { ref, computed } from "vue";
 import TodoSimpleForm from "./components/TodoSimpleForm.vue";
 import TodoList from "./components/TodoList.vue";
 
@@ -209,16 +212,16 @@ export default {
       todos.value[index].completed = !todos.value[index].completed;
     };
 
-    const count = ref(1);
-    const doubleCount = computed(() => {
-      return count.value * 2;
+    const searchText = ref("");
+    const filteredTodos = computed(() => {
+      if (searchText.value) {
+        return todos.value.filter((todo) => {
+          return todo.subject.includes(searchText.value);
+        });
+      }
+
+      return todos.value;
     });
-    // 컴퓨티드는 처음에 한번 계산하고 그 값을 저장하고 있음
-    // 두 번 쓰더라도 한번만 찍힘
-    const doubleCountMethod = () => {
-      return count.value * 2;
-    };
-    // 두 번쓰면 두 번 호출
     return {
       toggle,
       todos,
@@ -227,9 +230,8 @@ export default {
       todoStyle,
       deleteItem,
       toggleTodo,
-      count,
-      doubleCount,
-      doubleCountMethod,
+      searchText,
+      filteredTodos,
     };
   },
 };
