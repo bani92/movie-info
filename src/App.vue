@@ -198,21 +198,18 @@ export default {
     };
 
     // form의 submit를 하면 화면이 리로딩되는데 preventDefault로 리로딩 방지
-    const addTodo = (todo) => {
+    const addTodo = async (todo) => {
       error.value = "";
-      axios
-        .post("http://localhost:3000/todos", {
+      try {
+        const res = await axios.post("http://localhost:3000/todos", {
           subject: todo.subject,
           completed: todo.completed,
-        })
-        .then((res) => {
-          console.log(res);
-          todos.value.push(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-          error.value = "Something went wrong";
         });
+        todos.value.push(res.data);
+      } catch (err) {
+        console.log(err);
+        error.value = "Something went wrong";
+      }
     };
 
     const onToggle = () => {
