@@ -197,6 +197,18 @@ export default {
       color: "gray",
     };
 
+    const getTodos = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/todos");
+        todos.value = res.data;
+      } catch (err) {
+        console.log(err);
+        error.value = "Something went wrong";
+      }
+    };
+
+    getTodos();
+
     // form의 submit를 하면 화면이 리로딩되는데 preventDefault로 리로딩 방지
     const addTodo = async (todo) => {
       error.value = "";
@@ -216,8 +228,14 @@ export default {
       toggle.value = !toggle.value;
     };
 
-    const deleteItem = (index) => {
-      todos.value.splice(index, 1);
+    const deleteItem = async (index) => {
+      const id = todos.value[index].id;
+      try {
+        await axios.delete("http://localhost:3000/todos/" + id);
+        todos.value.splice(index, 1);
+      } catch (err) {
+        error.value = "Something went wrong";
+      }
       // todos.value = todos.value.filter((e) => e.id !== e1); 내가 한 방법
     };
 
