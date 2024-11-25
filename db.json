@@ -18,7 +18,7 @@
     {
       "id": "bac7",
       "subject": "2",
-      "completed": false
+      "completed": true
     },
     {
       "id": "eb27",
@@ -26,14 +26,9 @@
       "completed": false
     },
     {
-      "id": "d84d",
-      "subject": "6",
-      "completed": false
-    },
-    {
       "id": "eef3",
       "subject": "7",
-      "completed": false
+      "completed": true
     },
     {
       "id": "36ee",
@@ -51,23 +46,13 @@
       "completed": false
     },
     {
-      "id": "f22b",
-      "subject": "99999",
-      "completed": false
-    },
-    {
-      "subject": "12345",
-      "completed": false,
-      "id": "fxw_OT3"
-    },
-    {
       "subject": "aaaa",
       "completed": false,
       "id": "A_ldaML"
     },
     {
       "subject": "bbbb",
-      "completed": false,
+      "completed": true,
       "id": "dw8snnh"
     },
     {
