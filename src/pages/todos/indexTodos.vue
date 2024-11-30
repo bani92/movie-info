@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h2>To-Do List</h2>
+    <div class="d-flex justify-content-between mb-3">
+      <h2>To-Do List</h2>
+      <button class="btn btn-primary" @click="moveToCreatePage">
+        Create Todo
+      </button>
+    </div>
     <input
       class="form-control"
       type="text"
@@ -9,7 +14,6 @@
       @keyup.enter="searchTodo"
     />
     <hr />
-    <TodoSimpleForm @add-todo="addTodo" />
     <div>{{ error }}</div>
     <div v-if="!todos.length">추가된 Todo가 없습니다</div>
     <TodoList
@@ -54,20 +58,23 @@
       </ul>
     </nav>
   </div>
+  <ToastTest v-if="showToast" :message="toastMessage" :type="toastAlertType" />
 </template>
 
 <script>
 import { ref, computed, watch } from "vue";
-import TodoSimpleForm from "@/components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
 import axios from "axios";
+import ToastTest from "@/components/ToastTest.vue";
+import { useToast } from "@/composables/toastTest";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
-    TodoSimpleForm,
     TodoList,
   },
   setup() {
+    const router = useRouter();
     const toggle = ref(false);
     const error = ref("");
     const todos = ref([]);
@@ -78,6 +85,8 @@ export default {
     const numberOfPages = computed(() => {
       return Math.ceil(numberOfTodos.value / limit);
     });
+    const { toastMessage, toastAlertType, showToast, triggerToast } =
+      useToast();
 
     const todoStyle = {
       textDecoration: "line-through",
@@ -94,6 +103,7 @@ export default {
         todos.value = res.data;
       } catch (err) {
         console.log(err);
+        triggerToast("Something went wrong", "danger");
         error.value = "Something went wrong";
       }
     };
@@ -112,6 +122,7 @@ export default {
       } catch (err) {
         console.log(err);
         error.value = "Something went wrong";
+        triggerToast("Something went wrong", "danger");
       }
     };
 
@@ -127,6 +138,7 @@ export default {
         getTodos(1);
       } catch (err) {
         error.value = "Something went wrong";
+        triggerToast("Something went wrong", "danger");
       }
       // todos.value = todos.value.filter((e) => e.id !== e1); 내가 한 방법
     };
@@ -141,7 +153,14 @@ export default {
         todos.value[index].completed = checked;
       } catch (err) {
         error.value = "Something went wrong";
+        triggerToast("Something went wrong", "danger");
       }
+    };
+
+    const moveToCreatePage = () => {
+      router.push({
+        name: "TodoCreate",
+      });
     };
 
     let timeout = null;
@@ -179,6 +198,11 @@ export default {
       currentPage,
       getTodos,
       searchTodo,
+      ToastTest,
+      toastMessage,
+      toastAlertType,
+      showToast,
+      moveToCreatePage,
     };
   },
 };
