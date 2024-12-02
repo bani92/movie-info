@@ -58,7 +58,13 @@
       </ul>
     </nav>
   </div>
-  <ToastTest v-if="showToast" :message="toastMessage" :type="toastAlertType" />
+  <transition name="fade">
+    <ToastTest
+      v-if="showToast"
+      :message="toastMessage"
+      :type="toastAlertType"
+    />
+  </transition>
 </template>
 
 <script>
@@ -130,9 +136,8 @@ export default {
       toggle.value = !toggle.value;
     };
 
-    const deleteItem = async (index) => {
+    const deleteItem = async (id) => {
       error.value = "";
-      const id = todos.value[index].id;
       try {
         await axios.delete("http://localhost:3000/todos/" + id);
         getTodos(1);
@@ -208,9 +213,26 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .todo {
   color: gray;
   text-decoration: line-through;
+}
+
+.fade-enter-activce,
+.fade-leave-activce {
+  transition: all 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+  transform: translateY(0px);
 }
 </style>

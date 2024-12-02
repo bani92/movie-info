@@ -35,6 +35,13 @@
           ></textarea>
         </div>
       </div>
+      <transition name="fade">
+        <ToastTest
+          v-if="showToast"
+          :message="toastMessage"
+          :type="toastAlertType"
+        />
+      </transition>
     </div>
 
     <button type="submit" class="btn btn-primary" :disabled="!todoUpdated">
@@ -48,7 +55,6 @@
       Cancel
     </button>
   </form>
-  <ToastTest v-if="showToast" :message="toastMessage" :type="toastAlertType" />
 </template>
 
 <script>
